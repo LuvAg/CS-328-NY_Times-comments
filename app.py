@@ -25,6 +25,8 @@ def generate_headline(seed_text, next_words=10, temperature=1.0):
     last_word = None
     for _ in range(next_words):
         token_list = tokenizer.texts_to_sequences([seed_text])[0]
+        if not token_list:
+            return seed_text + " [Cannot generate — unknown words]"
         token_list = pad_sequences([token_list], maxlen=max_sequence_length-1, padding='pre')
         preds = model.predict(token_list, verbose=0)[0]
         predicted_index = sample_with_temperature(preds, temperature)
